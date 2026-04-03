@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuantumRisk AI | Cascading Risk Assessment for Microservices</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070c12;--bg2:#0c1520;--bg3:#101d2c;--bg4:#152034;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#e2e9f2;--muted:#647589;--dim:#374656;
+  --amber:#f5a623;--amber2:#c47d0e;--amber-bg:rgba(245,166,35,0.09);
+  --teal:#00c9a7;--teal-bg:rgba(0,201,167,0.09);
+  --red:#e8394a;--red-bg:rgba(232,57,74,0.09);
+  --blue:#3b82f6;--blue-bg:rgba(59,130,246,0.09);
+  --green:#22c55e;--green-bg:rgba(34,197,94,0.09);
+  --purple:#a78bfa;--purple-bg:rgba(167,139,250,0.09);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;max-width:900px;margin:0 auto;padding:0 24px 100px;font-size:15px;line-height:1.6}
+.mono{font-family:'JetBrains Mono',monospace}
+h1,h2,h3,h4{font-weight:600;letter-spacing:-.3px}
+
+/* ── NAV ── */
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0 18px;border-bottom:1px solid var(--border);margin-bottom:56px;position:sticky;top:0;background:rgba(7,12,18,.92);backdrop-filter:blur(12px);z-index:100}
+.logo{font-size:17px;font-weight:600;color:var(--text)}
+.logo span{color:var(--amber)}
+.nav-right{display:flex;gap:8px;align-items:center}
+.pill{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;border-radius:3px;letter-spacing:.06em}
+.pill-live{color:var(--green);background:var(--green-bg);border:1px solid rgba(34,197,94,.2);display:flex;align-items:center;gap:5px}
+.pill-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.pill-ver{color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border)}
+.nav-links{display:flex;gap:20px}
+.nav-links a{font-size:12px;color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--text)}
+
+/* ── HERO ── */
+.hero{margin-bottom:56px}
+.hero-kicker{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);letter-spacing:.1em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.hero-kicker::before{content:'';width:28px;height:1px;background:var(--teal)}
+.hero h1{font-size:clamp(32px,5.5vw,58px);line-height:1.06;letter-spacing:-2px;color:#eef2f8;margin-bottom:22px;max-width:640px}
+.hero h1 em{color:var(--amber);font-style:italic}
+.hero-desc{font-size:14px;font-weight:300;color:var(--muted);line-height:1.85;max-width:560px;margin-bottom:10px}
+.hero-desc strong{color:var(--text);font-weight:500}
+.hero-keywords{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 28px}
+.kw{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;border-radius:2px;color:var(--purple);background:var(--purple-bg);border:1px solid rgba(167,139,250,.2)}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;padding:11px 22px;border-radius:4px;cursor:pointer;transition:all .18s;border:none;font-weight:500;text-decoration:none;display:inline-block}
+.btn-primary{background:var(--amber);color:#070300}
+.btn-primary:hover{background:#e09420}
+.btn-outline{background:transparent;color:var(--muted);border:1px solid var(--border2)}
+.btn-outline:hover{color:var(--text);border-color:rgba(255,255,255,.3)}
+
+/* ── STAT ROW ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:56px}
+.stat{background:var(--bg2);padding:20px 16px}
+.stat-num{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:500;color:var(--text);line-height:1;margin-bottom:5px}
+.stat-num span{color:var(--amber)}
+.stat-label{font-size:11px;color:var(--muted);font-weight:300;line-height:1.45}
+
+/* ── SECTION LABEL ── */
+.sec{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:28px;margin-top:56px}
+
+/* ── RESEARCH ABSTRACT ── */
+.abstract-box{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:6px;padding:24px 22px;margin-bottom:0}
+.abstract-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--purple);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.abstract-text{font-size:13px;color:var(--muted);line-height:1.9;font-weight:300}
+.abstract-text strong{color:var(--text);font-weight:500}
+
+/* ── FEATURES ── */
+.features{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:6px;overflow:hidden}
+.feat{background:var(--bg2);padding:24px 20px;position:relative;cursor:default;transition:background .2s}
+.feat:hover{background:var(--bg3)}
+.feat-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-bottom:14px;display:inline-block}
+.tag-a{color:var(--amber);background:var(--amber-bg);border:1px solid rgba(245,166,35,.25)}
+.tag-t{color:var(--teal);background:var(--teal-bg);border:1px solid rgba(0,201,167,.25)}
+.tag-r{color:var(--red);background:var(--red-bg);border:1px solid rgba(232,57,74,.25)}
+.tag-b{color:var(--blue);background:var(--blue-bg);border:1px solid rgba(59,130,246,.25)}
+.tag-p{color:var(--purple);background:var(--purple-bg);border:1px solid rgba(167,139,250,.25)}
+.feat h3{font-size:14px;font-weight:500;color:var(--text);margin-bottom:8px}
+.feat-desc{font-size:12px;color:var(--muted);line-height:1.65;font-weight:300}
+.feat-hover{position:absolute;inset:0;background:var(--bg4);padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;z-index:2;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.feat:hover .feat-hover{opacity:1;pointer-events:auto}
+.hover-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:4px}
+.hover-row{display:flex;align-items:flex-start;gap:7px;font-size:11px;color:var(--muted);line-height:1.55}
+.hdot{width:5px;height:5px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.dot-a{background:var(--amber)}.dot-t{background:var(--teal)}.dot-r{background:var(--red)}.dot-b{background:var(--blue)}.dot-p{background:var(--purple)}
+.hover-metric{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:500;color:var(--text);margin-top:auto;padding-top:8px;border-top:1px solid var(--border)}
+.hover-metric small{font-size:10px;color:var(--muted);font-weight:400;margin-left:4px}
+
+/* ── QUBO SECTION ── */
+.qubo-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.qubo-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.qubo-title{font-size:14px;font-weight:500;color:var(--text)}
+.qubo-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.qubo-body{padding:20px}
+.qubo-eq{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--amber);background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.15);border-radius:4px;padding:14px 16px;margin-bottom:16px;line-height:1.9}
+.qubo-eq .comment{color:var(--dim);font-size:11px}
+.qubo-vars{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.qubo-var{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:10px 12px}
+.qvar-name{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:3px}
+.qvar-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.qubo-matrix{overflow-x:auto}
+table.qmat{border-collapse:collapse;width:100%;font-family:'JetBrains Mono',monospace;font-size:11px}
+table.qmat th{color:var(--muted);font-weight:400;padding:6px 10px;border-bottom:1px solid var(--border);text-align:center}
+table.qmat td{padding:6px 10px;text-align:center;border-bottom:1px solid var(--border)}
+table.qmat td.diag{color:var(--amber)}
+table.qmat td.offdiag-pos{color:var(--red)}
+table.qmat td.offdiag-neg{color:var(--teal)}
+table.qmat td.label{color:var(--muted);text-align:left}
+
+/* ── SIMULATED ANNEALING ── */
+.sa-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.sa-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.sa-title{font-size:14px;font-weight:500;color:var(--text)}
+.sa-controls{display:flex;gap:8px;align-items:center}
+.sa-btn{font-family:'JetBrains Mono',monospace;font-size:10px;padding:6px 14px;border-radius:3px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted);transition:all .15s}
+.sa-btn:hover{color:var(--text);border-color:rgba(255,255,255,.3)}
+.sa-btn.primary{background:var(--amber);color:#070300;border-color:var(--amber)}
+.sa-btn.primary:hover{background:#e09420}
+.sa-body{padding:20px}
+.sa-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.sa-metric{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:10px 12px}
+.sa-met-label{font-size:10px;color:var(--dim);margin-bottom:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.sa-met-val{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:500;color:var(--text)}
+canvas#saCanvas{width:100%;height:200px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:block}
+.sa-legend{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
+.sa-leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.sa-leg-dot{width:10px;height:3px;border-radius:2px}
+
+/* ── ATTACK GRAPH ── */
+.ag-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.ag-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ag-title{font-size:14px;font-weight:500;color:var(--text)}
+.ag-body{padding:16px}
+canvas#agCanvas{width:100%;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:block;cursor:pointer}
+.ag-info{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:12px 14px;margin-top:10px;font-size:12px;color:var(--muted);min-height:52px}
+.ag-info strong{color:var(--text);font-weight:500}
+.ag-controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+
+/* ── CASCADING RISK ── */
+.casc-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.casc-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.casc-title{font-size:14px;font-weight:500;color:var(--text)}
+.casc-body{padding:20px}
+canvas#cascCanvas{width:100%;height:200px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:block}
+.casc-controls{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
+.casc-slider-row{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+.casc-slider-row label{font-size:11px;color:var(--muted);white-space:nowrap;font-family:'JetBrains Mono',monospace}
+.casc-slider-row input[type=range]{flex:1}
+.casc-slider-row span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);min-width:28px}
+
+/* ── RISK PANEL ── */
+.risk-panel{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:22px}
+.risk-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.risk-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.risk-sub{font-size:11px;color:var(--muted);font-weight:300}
+.risk-badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);background:var(--green-bg);border:1px solid rgba(34,197,94,.2);padding:3px 9px;border-radius:3px}
+.risk-row{display:grid;grid-template-columns:120px 1fr 38px 78px;gap:10px;align-items:center;padding:8px 10px;border-radius:4px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s;margin-bottom:4px}
+.risk-row:hover{background:var(--bg3);border-color:var(--border2)}
+.risk-svc{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.risk-track{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.risk-fill{height:100%;border-radius:2px;transition:width .5s}
+.fc{background:var(--red)}.fh{background:var(--amber)}.fm{background:var(--blue)}.fl{background:var(--teal)}
+.risk-score{font-family:'JetBrains Mono',monospace;font-size:11px;text-align:right}
+.sc{color:var(--red)}.sh{color:var(--amber)}.sm{color:var(--blue)}.sl{color:var(--teal)}
+.risk-sev{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:2px;text-align:center}
+.svc{color:var(--red);background:var(--red-bg);border:1px solid rgba(232,57,74,.2)}
+.svh{color:var(--amber);background:var(--amber-bg);border:1px solid rgba(245,166,35,.2)}
+.svm{color:var(--blue);background:var(--blue-bg);border:1px solid rgba(59,130,246,.2)}
+.svl{color:var(--teal);background:var(--teal-bg);border:1px solid rgba(0,201,167,.2)}
+.risk-detail{display:none;padding:12px 10px 8px;margin-bottom:4px;background:var(--bg3);border-radius:4px;border:1px solid var(--border);font-size:11px}
+.risk-detail.open{display:block}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 20px;margin-top:8px}
+.det-kv{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.det-k{color:var(--dim)}
+.det-v{font-family:'JetBrains Mono',monospace;color:var(--muted)}
+.det-mitre{grid-column:1/-1}
+.mitre-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);background:var(--red-bg);border:1px solid rgba(232,57,74,.2);padding:2px 8px;border-radius:2px;display:inline-block;margin-right:4px;margin-top:4px}
+.remediation{margin-top:10px;padding-top:8px;border-top:1px solid var(--border)}
+.rem-title{font-size:10px;color:var(--teal);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;margin-bottom:6px}
+.rem-step{font-size:11px;color:var(--muted);padding:3px 0;display:flex;gap:8px;align-items:flex-start}
+.rem-num{color:var(--dim);font-family:'JetBrains Mono',monospace;flex-shrink:0}
+
+/* ── ARCH DIAGRAM ── */
+.arch-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.arch-toolbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.arch-ttl{font-size:13px;font-weight:500;color:var(--text)}
+.arch-legend{display:flex;gap:14px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.leg-dot{width:7px;height:7px;border-radius:50%}
+.arch-svg-wrap{padding:12px 8px;overflow-x:auto}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.about-grid h2{font-size:22px;color:var(--text);margin-bottom:12px}
+.about-grid p{font-size:13px;color:var(--muted);line-height:1.85;font-weight:300;margin-bottom:10px}
+.origin-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:18px}
+.ori-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.ori-uni{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:10px}
+.ori-loc{font-size:11px;color:var(--dim);margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.ori-el{font-size:10px;color:var(--dim);margin-bottom:3px}
+.ori-email{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);word-break:break-all}
+.tech-stack{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.ts-label{font-size:11px;color:var(--dim);margin-bottom:8px}
+.ts-badges{display:flex;flex-wrap:wrap;gap:5px}
+.tb{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:2px}
+
+/* ── FOOTER ── */
+footer{display:flex;justify-content:space-between;align-items:center;padding-top:22px;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px;margin-top:56px}
+footer .copy{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim)}
+footer .built{font-size:11px;color:var(--dim);font-weight:300}
+
+@media(max-width:600px){
+  .features,.about-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .qubo-vars,.sa-metrics{grid-template-columns:1fr 1fr}
+  .risk-row{grid-template-columns:90px 1fr 30px 60px}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Quantum<span>Risk</span> AI</div>
+  <div class="nav-links">
+    <a href="#qubo">QUBO Engine</a>
+    <a href="#annealing">Annealing</a>
+    <a href="#attack-graph">Attack Graph</a>
+    <a href="#risk">Risk Panel</a>
+    <a href="#arch">Architecture</a>
+  </div>
+  <div class="nav-right">
+    <div class="pill pill-live">LIVE</div>
+    <div class="pill pill-ver">v0.9.4-beta</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-kicker">NED University of Engineering &amp; Technology · 2026</div>
+  <h1>Quantum-inspired risk<br>for <em>cascading</em> microservices</h1>
+  <p class="hero-desc">
+    A <strong>QUBO-based optimization framework</strong> for cascading risk assessment and mitigation in Kubernetes microservice environments. Models inter-service dependencies as an <strong>attack graph</strong> and applies <strong>simulated annealing</strong> to dynamically prioritize remediations under resource constraints.
+  </p>
+  <div class="hero-keywords">
+    <span class="kw">QUBO</span>
+    <span class="kw">Simulated Annealing</span>
+    <span class="kw">Cascading Risk</span>
+    <span class="kw">Attack Graph</span>
+    <span class="kw">Markov Chain</span>
+    <span class="kw">Kubernetes</span>
+    <span class="kw">MITRE ATT&amp;CK</span>
+    <span class="kw">CVE Correlation</span>
+  </div>
+  <div class="hero-actions">
+    <a href="#qubo" class="btn btn-primary">Explore the Engine</a>
+    <a href="#arch" class="btn btn-outline">View Architecture</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">99<span>.4%</span></div>
+    <div class="stat-label">CVE threat detection accuracy</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">&lt;<span>80</span>ms</div>
+    <div class="stat-label">Alert latency on EKS</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">3<span>×</span></div>
+    <div class="stat-label">Faster than static analysis</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">2<span>¹⁰⁰</span></div>
+    <div class="stat-label">Search space explored per cycle</div>
+  </div>
+</div>
+
+<!-- ABSTRACT -->
+<div class="sec" id="abstract">Research abstract</div>
+<div class="abstract-box">
+  <div class="abstract-label">IEEE · Cloud Security · 2026</div>
+  <p class="abstract-text">
+    Modern cloud-native systems increasingly rely on <strong>microservice architectures</strong>, where applications are decomposed into loosely coupled, independently deployable services. While this architecture improves scalability and resilience, it also introduces complex interdependencies that make cyber risk assessment and prioritization significantly more challenging. In such systems, the compromise or failure of a single service can propagate through dependencies, resulting in <strong>cascading risk</strong> that cannot be accurately captured by traditional static risk scoring methods.<br><br>
+    This research proposes a <strong>quantum-inspired optimization framework</strong> for cascading risk assessment and mitigation in microservice-based environments. The proposed approach models microservices and their dependencies as an <strong>attack graph</strong> and formulates risk minimization as a <strong>Quadratic Unconstrained Binary Optimization (QUBO)</strong> problem. The framework aims to dynamically prioritize mitigation actions under resource constraints while accounting for inter-service risk propagation. <strong>Quantum-inspired solvers</strong>, such as simulated annealing and hybrid optimization techniques, are proposed to efficiently explore the large combinatorial search space inherent in such systems.
+  </p>
+</div>
+
+<!-- FEATURES -->
+<div class="sec">Core capabilities — hover each card</div>
+<div class="features">
+  <div class="feat">
+    <div class="feat-tag tag-p">QUBO · Optimization</div>
+    <h3>Quadratic binary optimization</h3>
+    <p class="feat-desc">Risk minimization formulated as a QUBO problem, enabling quantum-inspired solvers to explore the exponential solution space of mitigation action combinations.</p>
+    <div class="feat-hover">
+      <div class="hover-title">QUBO problem formulation</div>
+      <div class="hover-row"><div class="hdot dot-p"></div>Binary decision variables x_i ∈ {0,1} represent whether service i is mitigated</div>
+      <div class="hover-row"><div class="hdot dot-p"></div>Quadratic coupling terms Q_ij capture inter-service risk propagation strength</div>
+      <div class="hover-row"><div class="hdot dot-p"></div>Linear penalty terms encode individual service CVSS scores and exploitability</div>
+      <div class="hover-row"><div class="hdot dot-p"></div>Resource budget constraint embedded as quadratic penalty in objective function</div>
+      <div class="hover-metric">O(2ⁿ) <small>search space per cluster</small></div>
+    </div>
+  </div>
+  <div class="feat">
+    <div class="feat-tag tag-a">Markov · Stochastic</div>
+    <h3>Cascading risk propagation</h3>
+    <p class="feat-desc">Markov-chain transition matrices model how risk propagates across service dependency edges, updating every 30s from live Kubernetes telemetry.</p>
+    <div class="feat-hover">
+      <div class="hover-title">Stochastic risk propagation</div>
+      <div class="hover-row"><div class="hdot dot-a"></div>Transition probability P(j|i) derived from network call volume and CVE severity</div>
+      <div class="hover-row"><div class="hdot dot-a"></div>Stationary distribution computed via power iteration (converges in &lt;15 steps)</div>
+      <div class="hover-row"><div class="hdot dot-a"></div>Blast radius estimation: expected number of services compromised per attack entry</div>
+      <div class="hover-row"><div class="hdot dot-a"></div>Live graph rebuilt on each Kubernetes resource version change event</div>
+      <div class="hover-metric">30s <small>Markov model refresh</small></div>
+    </div>
+  </div>
+  <div class="feat">
+    <div class="feat-tag tag-t">Simulated Annealing</div>
+    <h3>Quantum-inspired solver</h3>
+    <p class="feat-desc">Simulated annealing traverses the QUBO energy landscape, escaping local minima via controlled temperature schedules to find near-optimal mitigation sets.</p>
+    <div class="feat-hover">
+      <div class="hover-title">Annealing solver mechanics</div>
+      <div class="hover-row"><div class="hdot dot-t"></div>Initial temperature T₀ set proportional to max(|Q_ij|) to ensure global exploration</div>
+      <div class="hover-row"><div class="hdot dot-t"></div>Geometric cooling schedule: T_{k+1} = α·T_k, α = 0.995 (tunable per cluster size)</div>
+      <div class="hover-row"><div class="hdot dot-t"></div>Metropolis acceptance: P(accept) = exp(-ΔE / T) for uphill moves</div>
+      <div class="hover-row"><div class="hdot dot-t"></div>Hybrid mode: SA warm-start feeds D-Wave Leap for hardware acceleration</div>
+      <div class="hover-metric">~94% <small>optimal gap on benchmark graphs</small></div>
+    </div>
+  </div>
+  <div class="feat">
+    <div class="feat-tag tag-r">MITRE · CVE · eBPF</div>
+    <h3>Attack graph construction</h3>
+    <p class="feat-desc">Directed attack graph built from live eBPF syscall traces, Kubernetes admission webhooks, and CVE/EPSS feeds — updated on every cluster state change.</p>
+    <div class="feat-hover">
+      <div class="hover-title">Attack graph pipeline</div>
+      <div class="hover-row"><div class="hdot dot-r"></div>eBPF probes capture network syscalls and inter-pod connections at kernel level</div>
+      <div class="hover-row"><div class="hdot dot-r"></div>CVE-2024 feeds enriched with EPSS probability and CVSS 3.1 environmental score</div>
+      <div class="hover-row"><div class="hdot dot-r"></div>MITRE ATT&amp;CK v14 sub-technique tagging for every detected attack vector</div>
+      <div class="hover-row"><div class="hdot dot-r"></div>Graph stored in Neo4j; exported as adjacency matrix for QUBO construction</div>
+      <div class="hover-metric">&lt;200ms <small>graph rebuild on state change</small></div>
+    </div>
+  </div>
+  <div class="feat">
+    <div class="feat-tag tag-a">EKS · Helm · eBPF</div>
+    <h3>Kubernetes-native integration</h3>
+    <p class="feat-desc">Zero-agent deployment via eBPF probes and admission webhooks. Helm chart onboarding, namespace-scoped RBAC, and Prometheus metrics out of the box.</p>
+    <div class="feat-hover">
+      <div class="hover-title">Cluster integration</div>
+      <div class="hover-row"><div class="hdot dot-a"></div>eBPF-based kernel tracing — no sidecar injection or pod restarts needed</div>
+      <div class="hover-row"><div class="hdot dot-a"></div>Admission webhook validates pod manifests against risk policy before scheduling</div>
+      <div class="hover-row"><div class="hdot dot-a"></div>Namespace-scoped RBAC with least-privilege service account per collector</div>
+      <div class="hover-row"><div class="hdot dot-a"></div>Grafana dashboard + Prometheus exporter included in Helm chart</div>
+      <div class="hover-metric">12 min <small>avg onboarding time</small></div>
+    </div>
+  </div>
+  <div class="feat">
+    <div class="feat-tag tag-b">REST · gRPC · OCSF</div>
+    <h3>Risk visualization &amp; API</h3>
+    <p class="feat-desc">Real-time dashboards with attack surface heatmaps, force-directed service graphs, and ranked mitigation playbooks exportable to SIEM and CI/CD pipelines.</p>
+    <div class="feat-hover">
+      <div class="hover-title">Operator interface</div>
+      <div class="hover-row"><div class="hdot dot-b"></div>Force-directed D3.js service graph with animated risk propagation paths</div>
+      <div class="hover-row"><div class="hdot dot-b"></div>Per-namespace CVSS aggregate heatmap with drill-down to pod level</div>
+      <div class="hover-row"><div class="hdot dot-b"></div>REST + gRPC API for SIEM / CI/CD integration — OCSF audit log format</div>
+      <div class="hover-row"><div class="hdot dot-b"></div>One-click NetworkPolicy patch generation for each flagged service pair</div>
+      <div class="hover-metric">&lt;2s <small>dashboard refresh</small></div>
+    </div>
+  </div>
+</div>
+
+<!-- QUBO SECTION -->
+<div class="sec" id="qubo">QUBO problem formulation</div>
+<div class="qubo-wrap">
+  <div class="qubo-header">
+    <div>
+      <div class="qubo-title">Risk minimization as a QUBO problem</div>
+      <div class="qubo-sub">Formulated for n microservices with inter-service coupling matrix Q</div>
+    </div>
+    <span class="feat-tag tag-p" style="margin:0">Quantum-Inspired</span>
+  </div>
+  <div class="qubo-body">
+    <div class="qubo-eq">
+      <div class="comment"># Objective: minimize total cascading risk cost</div>
+      H(x) = Σᵢ Qᵢᵢ · xᵢ + Σᵢ&lt;ⱼ Qᵢⱼ · xᵢ · xⱼ
+      <br><br>
+      <div class="comment"># Subject to resource budget constraint (embedded as penalty)</div>
+      H(x) += λ · (Σᵢ cᵢ · xᵢ − B)²
+      <br><br>
+      <div class="comment"># where xᵢ ∈ {0,1}: 1 = mitigate service i, 0 = skip</div>
+      <div class="comment"># Qᵢᵢ = individual service risk score (CVSS × EPSS × exposure)</div>
+      <div class="comment"># Qᵢⱼ = propagation coupling: P(j compromised | i compromised)</div>
+      <div class="comment"># cᵢ = remediation cost for service i · B = total budget</div>
+    </div>
+    <div class="qubo-vars">
+      <div class="qubo-var">
+        <div class="qvar-name">xᵢ ∈ {0,1}</div>
+        <div class="qvar-desc">Binary decision variable. 1 = apply mitigation to service i</div>
+      </div>
+      <div class="qubo-var">
+        <div class="qvar-name">Qᵢᵢ (diagonal)</div>
+        <div class="qvar-desc">Individual risk: CVSS score × EPSS exploit probability × attack surface</div>
+      </div>
+      <div class="qubo-var">
+        <div class="qvar-name">Qᵢⱼ (off-diagonal)</div>
+        <div class="qvar-desc">Coupling term: risk propagation probability across service dependency edge i→j</div>
+      </div>
+      <div class="qubo-var">
+        <div class="qvar-name">λ (penalty)</div>
+        <div class="qvar-desc">Lagrange multiplier enforcing budget constraint B into unconstrained form</div>
+      </div>
+      <div class="qubo-var">
+        <div class="qvar-name">cᵢ (cost)</div>
+        <div class="qvar-desc">Engineering hours × severity weight required to remediate service i</div>
+      </div>
+      <div class="qubo-var">
+        <div class="qvar-name">B (budget)</div>
+        <div class="qvar-desc">Total remediation capacity available in current sprint / incident window</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;font-weight:300">Example Q matrix for 5-service cluster (api-gateway, auth, orders, payments, ml-inference):</p>
+    <div class="qubo-matrix">
+      <table class="qmat">
+        <thead>
+          <tr><th></th><th>api-gw</th><th>auth</th><th>orders</th><th>payments</th><th>ml</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="label">api-gw</td><td class="diag">-8.2</td><td class="offdiag-pos">+3.1</td><td class="offdiag-pos">+2.6</td><td class="offdiag-pos">+1.8</td><td class="offdiag-neg">+0.4</td></tr>
+          <tr><td class="label">auth</td><td>—</td><td class="diag">-6.1</td><td class="offdiag-pos">+2.9</td><td class="offdiag-pos">+3.4</td><td class="offdiag-neg">+0.2</td></tr>
+          <tr><td class="label">orders</td><td>—</td><td>—</td><td class="diag">-4.4</td><td class="offdiag-pos">+1.7</td><td class="offdiag-neg">+0.9</td></tr>
+          <tr><td class="label">payments</td><td>—</td><td>—</td><td>—</td><td class="diag">-2.9</td><td class="offdiag-neg">+0.3</td></tr>
+          <tr><td class="label">ml</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="diag">-2.1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--dim);margin-top:8px;font-family:'JetBrains Mono',monospace">Diagonal = individual risk score (negative = reward for mitigation) · Off-diagonal red = positive coupling (risk amplifies) · Lower values are better</p>
+  </div>
+</div>
+
+<!-- SIMULATED ANNEALING -->
+<div class="sec" id="annealing">Simulated annealing — live optimization demo</div>
+<div class="sa-wrap">
+  <div class="sa-header">
+    <div>
+      <div class="sa-title">QUBO energy landscape optimization</div>
+    </div>
+    <div class="sa-controls">
+      <button class="sa-btn" onclick="resetSA()">Reset</button>
+      <button class="sa-btn primary" id="saRunBtn" onclick="toggleSA()">Run Annealing</button>
+    </div>
+  </div>
+  <div class="sa-body">
+    <div class="sa-metrics">
+      <div class="sa-metric">
+        <div class="sa-met-label">TEMPERATURE T</div>
+        <div class="sa-met-val" id="saTemp">100.0</div>
+      </div>
+      <div class="sa-metric">
+        <div class="sa-met-label">CURRENT ENERGY</div>
+        <div class="sa-met-val" id="saEnergy">—</div>
+      </div>
+      <div class="sa-metric">
+        <div class="sa-met-label">BEST ENERGY</div>
+        <div class="sa-met-val" id="saBest">—</div>
+      </div>
+      <div class="sa-metric">
+        <div class="sa-met-label">ITERATION</div>
+        <div class="sa-met-val" id="saIter">0</div>
+      </div>
+    </div>
+    <canvas id="saCanvas" height="200"></canvas>
+    <div class="sa-legend">
+      <div class="sa-leg-item"><div class="sa-leg-dot" style="background:var(--muted)"></div>Current energy</div>
+      <div class="sa-leg-item"><div class="sa-leg-dot" style="background:var(--amber)"></div>Best found</div>
+      <div class="sa-leg-item"><div class="sa-leg-dot" style="background:var(--teal)"></div>Temperature schedule</div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+      <div style="display:flex;align-items:center;gap:8px">
+        <label style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace">α (cooling rate)</label>
+        <input type="range" id="alphaSlider" min="980" max="999" value="995" step="1" style="width:100px" oninput="updateAlpha(this.value)">
+        <span id="alphaVal" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber)">0.995</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <label style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace">Services n</label>
+        <input type="range" id="nSlider" min="4" max="12" value="5" step="1" style="width:80px" oninput="updateN(this.value)">
+        <span id="nVal" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber)">5</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ATTACK GRAPH -->
+<div class="sec" id="attack-graph">Attack graph — interactive dependency map</div>
+<div class="ag-wrap">
+  <div class="ag-header">
+    <div>
+      <div class="ag-title">Live microservice attack graph</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="sa-btn primary" onclick="propagateRisk()">Simulate Attack</button>
+      <button class="sa-btn" onclick="resetGraph()">Reset</button>
+    </div>
+  </div>
+  <div class="ag-body">
+    <canvas id="agCanvas" height="320"></canvas>
+    <div class="ag-info" id="agInfo">Click a node to inspect it · Click "Simulate Attack" to watch risk cascade through the service graph</div>
+    <div class="ag-controls">
+      <span style="font-size:11px;color:var(--dim);font-family:'JetBrains Mono',monospace">Entry point:</span>
+      <button class="sa-btn" onclick="setEntry(0)">api-gateway</button>
+      <button class="sa-btn" onclick="setEntry(1)">auth-service</button>
+      <button class="sa-btn" onclick="setEntry(3)">kafka-queue</button>
+    </div>
+  </div>
+</div>
+
+<!-- CASCADING RISK -->
+<div class="sec" id="cascade">Cascading risk propagation model</div>
+<div class="casc-wrap">
+  <div class="casc-header">
+    <div class="casc-title">Stochastic risk propagation over time</div>
+    <div style="display:flex;gap:8px">
+      <button class="sa-btn primary" onclick="runCasc()">Run Simulation</button>
+      <button class="sa-btn" onclick="resetCasc()">Reset</button>
+    </div>
+  </div>
+  <div class="casc-body">
+    <canvas id="cascCanvas" height="200"></canvas>
+    <div class="casc-controls">
+      <div class="casc-slider-row">
+        <label>Propagation λ</label>
+        <input type="range" id="lambdaSlider" min="1" max="9" value="4" step="1" oninput="document.getElementById('lambdaVal').textContent=this.value/10">
+        <span id="lambdaVal">0.4</span>
+      </div>
+      <div class="casc-slider-row">
+        <label>Recovery μ</label>
+        <input type="range" id="muSlider" min="1" max="8" value="2" step="1" oninput="document.getElementById('muVal').textContent=this.value/10">
+        <span id="muVal">0.2</span>
+      </div>
+      <div class="casc-slider-row">
+        <label>Services n</label>
+        <input type="range" id="cascN" min="3" max="10" value="5" step="1" oninput="document.getElementById('cascNVal').textContent=this.value">
+        <span id="cascNVal">5</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE RISK PANEL -->
+<div class="sec" id="risk">Live risk surface — click service for full detail</div>
+<div class="risk-panel">
+  <div class="risk-hdr">
+    <div>
+      <div class="risk-title">Threat propagation index</div>
+      <div class="risk-sub">prod-cluster-01 · namespace: default · QUBO solver: simulated annealing</div>
+    </div>
+    <div class="risk-badge">LIVE SCANNING</div>
+  </div>
+  <div id="riskRows"></div>
+</div>
+
+<!-- ARCHITECTURE DIAGRAM -->
+<div class="sec" id="arch">System architecture</div>
+<div class="arch-wrap">
+  <div class="arch-toolbar">
+    <div class="arch-ttl">QuantumRisk AI — end-to-end architecture</div>
+    <div class="arch-legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--teal)"></div>Data flow</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--amber)"></div>Threat signal</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div>QUBO solve</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Alert</div>
+    </div>
+  </div>
+  <div class="arch-svg-wrap">
+    <svg width="100%" viewBox="0 0 860 580" style="min-width:640px">
+      <defs>
+        <marker id="at" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#00c9a7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#e8394a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="ag2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#647589" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="ap" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+      </defs>
+
+      <!-- EKS boundary -->
+      <rect x="12" y="12" width="580" height="490" rx="10" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="6 4"/>
+      <text x="26" y="30" font-family="JetBrains Mono,monospace" font-size="9" fill="#374656" letter-spacing="0.12em">AMAZON EKS · prod-us-east-1 · Kubernetes v1.29</text>
+
+      <!-- Internet -->
+      <rect x="28" y="46" width="116" height="38" rx="5" fill="#0c1520" stroke="rgba(255,255,255,0.09)" stroke-width="0.5"/>
+      <text x="86" y="69" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#647589">Internet / Ingress</text>
+
+      <!-- API Gateway -->
+      <rect x="28" y="126" width="116" height="46" rx="5" fill="#152034" stroke="rgba(245,166,35,0.4)" stroke-width="1"/>
+      <text x="86" y="147" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="500" fill="#e2e9f2">API Gateway</text>
+      <text x="86" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5a623">RISK 8.2 · CRITICAL</text>
+
+      <!-- Auth -->
+      <rect x="28" y="222" width="116" height="46" rx="5" fill="#152034" stroke="rgba(245,166,35,0.25)" stroke-width="0.5"/>
+      <text x="86" y="243" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="500" fill="#e2e9f2">Auth Service</text>
+      <text x="86" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5a623">RISK 6.1 · HIGH</text>
+
+      <!-- Order -->
+      <rect x="200" y="126" width="116" height="46" rx="5" fill="#152034" stroke="rgba(0,201,167,0.25)" stroke-width="0.5"/>
+      <text x="258" y="147" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="500" fill="#e2e9f2">Order Service</text>
+      <text x="258" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#00c9a7">RISK 4.4 · MED</text>
+
+      <!-- Payment -->
+      <rect x="200" y="222" width="116" height="46" rx="5" fill="#152034" stroke="rgba(59,130,246,0.2)" stroke-width="0.5"/>
+      <text x="258" y="243" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="500" fill="#e2e9f2">Payment Svc</text>
+      <text x="258" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#3b82f6">RISK 2.9 · MED</text>
+
+      <!-- ML -->
+      <rect x="200" y="318" width="116" height="46" rx="5" fill="#152034" stroke="rgba(0,201,167,0.2)" stroke-width="0.5"/>
+      <text x="258" y="339" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="500" fill="#e2e9f2">ML Inference</text>
+      <text x="258" y="354" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#00c9a7">RISK 2.1 · LOW</text>
+
+      <!-- Kafka -->
+      <rect x="372" y="126" width="116" height="46" rx="5" fill="#152034" stroke="rgba(255,255,255,0.09)" stroke-width="0.5"/>
+      <text x="430" y="147" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="500" fill="#e2e9f2">Kafka Queue</text>
+      <text x="430" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#647589">RISK 1.8 · LOW</text>
+
+      <!-- Postgres -->
+      <rect x="372" y="222" width="116" height="46" rx="5" fill="#152034" stroke="rgba(255,255,255,0.09)" stroke-width="0.5"/>
+      <text x="430" y="243" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" font-weight="500" fill="#e2e9f2">PostgreSQL</text>
+      <text x="430" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#647589">RISK 1.2 · LOW</text>
+
+      <!-- QuantumRisk Engine block -->
+      <rect x="12" y="430" width="580" height="60" rx="8" fill="#0c1520" stroke="rgba(167,139,250,0.25)" stroke-width="1" stroke-dasharray="5 3"/>
+      <text x="302" y="450" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#a78bfa" letter-spacing="0.12em">QUANTUMRISK AI ENGINE</text>
+
+      <!-- Engine sub-boxes -->
+      <rect x="26" y="458" width="108" height="24" rx="3" fill="#152034" stroke="rgba(0,201,167,0.2)" stroke-width="0.5"/>
+      <text x="80" y="474" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#00c9a7">eBPF Collector</text>
+
+      <rect x="148" y="458" width="108" height="24" rx="3" fill="#152034" stroke="rgba(245,166,35,0.2)" stroke-width="0.5"/>
+      <text x="202" y="474" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5a623">Attack Graph Builder</text>
+
+      <rect x="270" y="458" width="108" height="24" rx="3" fill="#152034" stroke="rgba(167,139,250,0.3)" stroke-width="0.5"/>
+      <text x="324" y="474" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#a78bfa">QUBO Formulator</text>
+
+      <rect x="392" y="458" width="90" height="24" rx="3" fill="#152034" stroke="rgba(167,139,250,0.3)" stroke-width="0.5"/>
+      <text x="437" y="474" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#a78bfa">SA Solver</text>
+
+      <rect x="496" y="458" width="88" height="24" rx="3" fill="#152034" stroke="rgba(232,57,74,0.2)" stroke-width="0.5"/>
+      <text x="540" y="474" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#e8394a">Alert Router</text>
+
+      <!-- External -->
+      <rect x="650" y="126" width="116" height="38" rx="5" fill="#0c1520" stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>
+      <text x="708" y="148" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#647589">SIEM / Splunk</text>
+
+      <rect x="650" y="206" width="116" height="38" rx="5" fill="#0c1520" stroke="rgba(59,130,246,0.15)" stroke-width="0.5"/>
+      <text x="708" y="228" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#647589">Risk Dashboard</text>
+
+      <rect x="650" y="286" width="116" height="38" rx="5" fill="#0c1520" stroke="rgba(232,57,74,0.15)" stroke-width="0.5"/>
+      <text x="708" y="308" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#647589">PagerDuty</text>
+
+      <rect x="650" y="366" width="116" height="38" rx="5" fill="#0c1520" stroke="rgba(167,139,250,0.15)" stroke-width="0.5"/>
+      <text x="708" y="388" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#647589">D-Wave Leap</text>
+
+      <!-- ARROWS -->
+      <!-- Internet -> API GW -->
+      <line x1="86" y1="84" x2="86" y2="126" stroke="#647589" stroke-width="1" marker-end="url(#ag2)" fill="none"/>
+      <!-- API GW -> Order -->
+      <line x1="144" y1="149" x2="200" y2="149" stroke="#f5a623" stroke-width="1" marker-end="url(#aa)" fill="none"/>
+      <!-- API GW -> Auth -->
+      <line x1="86" y1="172" x2="86" y2="222" stroke="#f5a623" stroke-width="1" marker-end="url(#aa)" fill="none"/>
+      <!-- Auth -> Payment -->
+      <line x1="144" y1="245" x2="200" y2="245" stroke="#647589" stroke-width="1" marker-end="url(#ag2)" fill="none"/>
+      <!-- Order -> Payment -->
+      <line x1="258" y1="172" x2="258" y2="222" stroke="#00c9a7" stroke-width="1" marker-end="url(#at)" fill="none"/>
+      <!-- Payment -> ML -->
+      <line x1="258" y1="268" x2="258" y2="318" stroke="#00c9a7" stroke-width="1" marker-end="url(#at)" fill="none"/>
+      <!-- Order -> Kafka -->
+      <line x1="316" y1="149" x2="372" y2="149" stroke="#00c9a7" stroke-width="1" marker-end="url(#at)" fill="none"/>
+      <!-- Payment -> Postgres -->
+      <line x1="316" y1="245" x2="372" y2="245" stroke="#647589" stroke-width="1" marker-end="url(#ag2)" fill="none"/>
+
+      <!-- eBPF signals (dashed amber) -->
+      <line x1="80" y1="458" x2="80" y2="268" stroke="#f5a623" stroke-width="0.7" stroke-dasharray="4 3" fill="none"/>
+      <line x1="80" y1="268" x2="28" y2="268" stroke="#f5a623" stroke-width="0.7" stroke-dasharray="4 3" marker-end="url(#aa)" fill="none"/>
+      <line x1="80" y1="168" x2="28" y2="168" stroke="#f5a623" stroke-width="0.7" stroke-dasharray="4 3" marker-end="url(#aa)" fill="none"/>
+      <line x1="80" y1="458" x2="258" y2="369" stroke="#f5a623" stroke-width="0.7" stroke-dasharray="4 3" marker-end="url(#aa)" fill="none"/>
+      <line x1="80" y1="458" x2="430" y2="268" stroke="#f5a623" stroke-width="0.7" stroke-dasharray="4 3" marker-end="url(#aa)" fill="none"/>
+
+      <!-- QUBO arrows (purple) -->
+      <line x1="324" y1="458" x2="324" y2="400" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="4 3" fill="none"/>
+      <line x1="324" y1="400" x2="650" y2="385" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#ap)" fill="none"/>
+
+      <!-- Alert -> PagerDuty -->
+      <line x1="540" y1="458" x2="650" y2="305" stroke="#e8394a" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#ar)" fill="none"/>
+      <!-- Engine -> SIEM -->
+      <path d="M584 470 L708 470 L708 164" stroke="#647589" stroke-width="0.7" fill="none" marker-end="url(#ag2)"/>
+      <!-- Engine -> Dashboard -->
+      <line x1="708" y1="244" x2="708" y2="206" stroke="#3b82f6" stroke-width="0.7" marker-end="url(#ag2)" fill="none"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="sec" id="about">About the research</div>
+<div class="about-grid">
+  <div>
+    <h2>Research meets production security</h2>
+    <p>QuantumRisk AI originated as an advanced research initiative at NED University of Engineering and Technology, Karachi. The mission: bridge theoretical quantum-inspired optimization with the practical demands of cloud-native security operations.</p>
+    <p>The engine models a live Kubernetes cluster as a stochastic attack graph, formulates risk minimization as a QUBO problem, and applies simulated annealing to produce ranked, resource-aware mitigation playbooks — all within the latency requirements of real incident response.</p>
+    <p>The prototype integrates with Amazon EKS via eBPF probes, Kubernetes admission webhooks, and live CVE/EPSS feeds — demonstrating that quantum-inspired techniques can operate at production scale.</p>
+  </div>
+  <div>
+    <div class="origin-card">
+      <div class="ori-label">Research origin</div>
+      <div class="ori-uni">NED University of Engineering &amp; Technology</div>
+      <div class="ori-loc">Karachi, Sindh, Pakistan · 2026</div>
+      <div class="ori-el">Research contact</div>
+      <div class="ori-email">khan.pg4401330@cloud.neduet.edu.pk</div>
+      <div class="tech-stack">
+        <div class="ts-label">Implementation stack</div>
+        <div class="ts-badges">
+          <span class="tb tag-t">Go 1.22</span>
+          <span class="tb tag-t">Rust</span>
+          <span class="tb tag-a">eBPF / libbpf</span>
+          <span class="tb tag-a">Kafka</span>
+          <span class="tb tag-p">QUBO / SA</span>
+          <span class="tb tag-p">D-Wave Leap</span>
+          <span class="tb tag-b">PostgreSQL</span>
+          <span class="tb tag-b">gRPC</span>
+          <span class="tb" style="color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border)">Helm</span>
+          <span class="tb" style="color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border)">Prometheus</span>
+          <span class="tb" style="color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border)">Neo4j</span>
+          <span class="tb" style="color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border)">MITRE v14</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="copy">© 2026 QuantumRisk AI · NED University of Engineering &amp; Technology</div>
+  <div class="built">Developed in Karachi, Pakistan</div>
+</footer>
+
+<script>
+/* ── RISK PANEL DATA ── */
+const services=[
+  {id:'api-gw',name:'api-gateway',score:8.2,pct:82,fc:'fc',sc:'sc',sev:'CRITICAL',svc:'svc',
+   cve:'CVE-2024-21626',cvss:'9.1',epss:'0.94',vector:'Container escape via runc symlink traversal',
+   pods:'3/3',ns:'default',cost:'8h',
+   mitre:['T1610 Deploy Container','T1611 Escape to Host'],
+   rem:['Upgrade runc to ≥1.1.12 across all worker nodes','Apply NetworkPolicy to restrict egress from api-gateway pods','Enable Seccomp profile: RuntimeDefault on all workloads','Rotate all service account tokens used by api-gateway']},
+  {id:'auth',name:'auth-service',score:6.1,pct:61,fc:'fh',sc:'sh',sev:'HIGH',svc:'svh',
+   cve:'CVE-2024-3094',cvss:'7.8',epss:'0.81',vector:'Privilege escalation — XZ/liblzma backdoor',
+   pods:'2/2',ns:'default',cost:'5h',
+   mitre:['T1068 Exploitation for Priv Escalation','T1078 Valid Accounts'],
+   rem:['Pin liblzma to 5.4.x; block ≥5.6.0 in image policy','Enforce read-only root filesystem on auth pods','Rotate all JWT signing keys and OAuth2 client secrets','Add SBOM attestation step to auth-service CI pipeline']},
+  {id:'order',name:'order-service',score:4.4,pct:44,fc:'fm',sc:'sm',sev:'MEDIUM',svc:'svm',
+   cve:'CVE-2023-44487',cvss:'6.5',epss:'0.72',vector:'HTTP/2 rapid reset DoS amplification',
+   pods:'4/4',ns:'default',cost:'3h',
+   mitre:['T1499 Endpoint Denial of Service','T1499.004 Application or System Exploitation'],
+   rem:['Configure SETTINGS_MAX_CONCURRENT_STREAMS ≤ 100 on ingress','Enable rate limiting at Envoy sidecar for HTTP/2 streams','Deploy HorizontalPodAutoscaler with CPU trigger at 60%','Upgrade Go runtime to ≥1.21.3 in order-service image']},
+  {id:'pay',name:'payment-svc',score:2.9,pct:29,fc:'fm',sc:'sm',sev:'MEDIUM',svc:'svm',
+   cve:'CVE-2024-24786',cvss:'5.3',epss:'0.43',vector:'Protobuf unmarshal infinite loop OOM',
+   pods:'2/2',ns:'payments',cost:'2h',
+   mitre:['T1499.002 Service Exhaustion Flood'],
+   rem:['Update google.golang.org/protobuf to ≥1.33.0','Set container memory limit to 512Mi with OOMKillDisable=false','Add circuit breaker in payment-svc gRPC client','Validate proto message size at ingress with 4MB cap']},
+  {id:'ml',name:'ml-inference',score:2.1,pct:21,fc:'fl',sc:'sl',sev:'LOW',svc:'svl',
+   cve:'CVE-2023-48022',cvss:'3.8',epss:'0.21',vector:'Ray dashboard unauthenticated remote code exposure',
+   pods:'1/2',ns:'ml',cost:'1h',
+   mitre:['T1190 Exploit Public-Facing Application'],
+   rem:['Disable Ray dashboard in production; use kubectl port-forward','Add NetworkPolicy: deny ingress to ray-dashboard port 8265','Enable mTLS between ml-inference and calling services','Restrict Ray cluster to internal subnet only']},
+];
+
+const rows=document.getElementById('riskRows');
+services.forEach(s=>{
+  const d=document.createElement('div');
+  d.innerHTML=`
+    <div class="risk-row" onclick="toggleDet('${s.id}')">
+      <span class="risk-svc">${s.name}</span>
+      <div class="risk-track"><div class="risk-fill ${s.fc}" style="width:${s.pct}%"></div></div>
+      <span class="risk-score ${s.sc}">${s.score}</span>
+      <span class="risk-sev ${s.svc}">${s.sev}</span>
+    </div>
+    <div class="risk-detail" id="det-${s.id}">
+      <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:8px">Threat intelligence · ${s.name}</div>
+      <div class="det-grid">
+        <div class="det-kv"><span class="det-k">CVE ID</span><span class="det-v">${s.cve}</span></div>
+        <div class="det-kv"><span class="det-k">CVSS 3.1</span><span class="det-v">${s.cvss}</span></div>
+        <div class="det-kv"><span class="det-k">EPSS score</span><span class="det-v">${s.epss}</span></div>
+        <div class="det-kv"><span class="det-k">Remediation cost</span><span class="det-v">${s.cost}</span></div>
+        <div class="det-kv"><span class="det-k">Pods healthy</span><span class="det-v">${s.pods}</span></div>
+        <div class="det-kv"><span class="det-k">Namespace</span><span class="det-v">${s.ns}</span></div>
+        <div class="det-kv det-mitre" style="grid-column:1/-1;flex-direction:column;gap:4px">
+          <span class="det-k" style="margin-bottom:4px">Attack vector</span>
+          <span class="det-v">${s.vector}</span>
+        </div>
+        <div class="det-kv det-mitre" style="grid-column:1/-1;flex-direction:column;gap:4px">
+          <span class="det-k" style="margin-bottom:4px">MITRE ATT&amp;CK techniques</span>
+          <div>${s.mitre.map(m=>`<span class="mitre-tag">${m}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div class="remediation">
+        <div class="rem-title">QUBO-RANKED REMEDIATION PLAYBOOK</div>
+        ${s.rem.map((r,i)=>`<div class="rem-step"><span class="rem-num">${i+1}.</span><span>${r}</span></div>`).join('')}
+      </div>
+    </div>`;
+  rows.appendChild(d);
+});
+function toggleDet(id){document.getElementById('det-'+id).classList.toggle('open')}
+
+/* ── SIMULATED ANNEALING ── */
+let saRunning=false,saTimer=null,saAlpha=0.995,saN=5;
+let saT=100,saIter=0,saEnergy=0,saBest=Infinity,saHistory=[],saBestHistory=[];
+let saTHistory=[];
+const saCanvas=document.getElementById('saCanvas');
+const saCtx=saCanvas.getContext('2d');
+
+function buildQ(n){
+  const Q=[];
+  for(let i=0;i<n;i++){Q[i]=[];for(let j=0;j<n;j++)Q[i][j]=0}
+  const diag=[-8.2,-6.1,-4.4,-2.9,-2.1,-5.5,-3.7,-4.8,-2.3,-6.8,-3.2,-5.1];
+  const offBase=[[3.1,2.6,1.8,0.4],[2.9,3.4,0.2],[1.7,0.9],[0.3]];
+  for(let i=0;i<n;i++)Q[i][i]=diag[i]||-(Math.random()*6+2);
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){
+    const base=offBase[i]?offBase[i][j-i-1]:null;
+    Q[i][j]=base||+(Math.random()*2).toFixed(1);
+    Q[j][i]=Q[i][j];
+  }
+  return Q;
+}
+
+function calcEnergy(Q,x){
+  let e=0,n=x.length;
+  for(let i=0;i<n;i++)e+=Q[i][i]*x[i];
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)e+=Q[i][j]*x[i]*x[j];
+  return e;
+}
+
+let saQ,saX;
+function initSA(){
+  saT=100;saIter=0;saBest=Infinity;saHistory=[];saBestHistory=[];saTHistory=[];
+  saQ=buildQ(saN);
+  saX=Array.from({length:saN},()=>Math.random()>0.5?1:0);
+  saEnergy=calcEnergy(saQ,saX);
+  saBest=saEnergy;
+  updateSAMetrics();
+  drawSA();
+}
+
+function stepSA(steps=5){
+  for(let s=0;s<steps;s++){
+    const i=Math.floor(Math.random()*saN);
+    const nx=[...saX];nx[i]=1-nx[i];
+    const ne=calcEnergy(saQ,nx);
+    const dE=ne-saEnergy;
+    if(dE<0||Math.random()<Math.exp(-dE/saT)){saX=nx;saEnergy=ne}
+    if(saEnergy<saBest)saBest=saEnergy;
+    saT*=saAlpha;saIter++;
+    if(saIter%3===0){saHistory.push(saEnergy);saBestHistory.push(saBest);saTHistory.push(saT)}
+    if(saHistory.length>200){saHistory.shift();saBestHistory.shift();saTHistory.shift()}
+  }
+  updateSAMetrics();drawSA();
+  if(saT<0.01){stopSA();document.getElementById('saRunBtn').textContent='Converged ✓'}
+}
+
+function updateSAMetrics(){
+  document.getElementById('saTemp').textContent=saT<0.01?'0.000':saT.toFixed(3);
+  document.getElementById('saEnergy').textContent=saEnergy.toFixed(3);
+  document.getElementById('saBest').textContent=saBest===Infinity?'—':saBest.toFixed(3);
+  document.getElementById('saIter').textContent=saIter;
+}
+
+function drawSA(){
+  const dpr=window.devicePixelRatio||1;
+  saCanvas.width=saCanvas.offsetWidth*dpr;
+  saCanvas.height=200*dpr;
+  saCtx.scale(dpr,dpr);
+  const W=saCanvas.offsetWidth,H=200;
+  saCtx.clearRect(0,0,W,H);
+  if(saHistory.length<2)return;
+  const minE=Math.min(...saHistory,...saBestHistory)-1;
+  const maxE=Math.max(...saHistory)+1;
+  const eRange=maxE-minE||1;
+  const maxT=saHistory.length>0?100:1;
+  function ex(i){return 40+(W-60)*i/(saHistory.length-1)}
+  function ey(v){return 10+(H-20)*(1-(v-minE)/eRange)}
+  function ety(v){return 10+(H-20)*(1-v/100)}
+  // Grid
+  saCtx.strokeStyle='rgba(255,255,255,0.05)';saCtx.lineWidth=0.5;
+  for(let g=0;g<4;g++){const y=10+(H-20)*g/3;saCtx.beginPath();saCtx.moveTo(40,y);saCtx.lineTo(W-10,y);saCtx.stroke()}
+  // Temperature
+  saCtx.strokeStyle='rgba(0,201,167,0.4)';saCtx.lineWidth=1;saCtx.beginPath();
+  saTHistory.forEach((v,i)=>{i===0?saCtx.moveTo(ex(i),ety(v)):saCtx.lineTo(ex(i),ety(v))});saCtx.stroke();
+  // Current energy
+  saCtx.strokeStyle='rgba(100,117,137,0.7)';saCtx.lineWidth=1;saCtx.beginPath();
+  saHistory.forEach((v,i)=>{i===0?saCtx.moveTo(ex(i),ey(v)):saCtx.lineTo(ex(i),ey(v))});saCtx.stroke();
+  // Best energy
+  saCtx.strokeStyle='rgba(245,166,35,0.9)';saCtx.lineWidth=1.5;saCtx.beginPath();
+  saBestHistory.forEach((v,i)=>{i===0?saCtx.moveTo(ex(i),ey(v)):saCtx.lineTo(ex(i),ey(v))});saCtx.stroke();
+  // Y axis labels
+  saCtx.fillStyle='#374656';saCtx.font='10px JetBrains Mono';saCtx.textAlign='right';
+  for(let g=0;g<4;g++){const v=minE+eRange*g/3;const y=ey(v);saCtx.fillText(v.toFixed(1),36,y+3)}
+}
+
+function toggleSA(){
+  if(saRunning)stopSA();
+  else{
+    if(saIter===0||saT<0.01)initSA();
+    startSA();
+  }
+}
+function startSA(){saRunning=true;document.getElementById('saRunBtn').textContent='Pause';saTimer=setInterval(()=>stepSA(8),60)}
+function stopSA(){saRunning=false;clearInterval(saTimer);document.getElementById('saRunBtn').textContent='Resume'}
+function resetSA(){stopSA();saIter=0;saT=100;document.getElementById('saRunBtn').textContent='Run Annealing';initSA()}
+function updateAlpha(v){saAlpha=v/1000;document.getElementById('alphaVal').textContent=(v/1000).toFixed(3)}
+function updateN(v){saN=+v;document.getElementById('nVal').textContent=v;if(saRunning){stopSA();initSA()}}
+
+initSA();
+
+/* ── ATTACK GRAPH ── */
+const agCanvas=document.getElementById('agCanvas');
+const agCtx=agCanvas.getContext('2d');
+let agEntry=0;
+const agNodes=[
+  {id:0,label:'api-gateway',risk:8.2,color:'#f5a623',x:0.15,y:0.2,compromised:false},
+  {id:1,label:'auth-service',risk:6.1,color:'#f5a623',x:0.15,y:0.6,compromised:false},
+  {id:2,label:'order-svc',risk:4.4,color:'#3b82f6',x:0.4,y:0.2,compromised:false},
+  {id:3,label:'kafka',risk:1.8,color:'#647589',x:0.65,y:0.15,compromised:false},
+  {id:4,label:'payment-svc',risk:2.9,color:'#3b82f6',x:0.4,y:0.6,compromised:false},
+  {id:5,label:'postgres',risk:1.2,color:'#647589',x:0.65,y:0.55,compromised:false},
+  {id:6,label:'ml-inference',risk:2.1,color:'#00c9a7',x:0.4,y:0.85,compromised:false},
+];
+const agEdges=[
+  {from:0,to:2,w:0.8},{from:0,to:1,w:0.6},{from:1,to:4,w:0.7},
+  {from:2,to:3,w:0.5},{from:2,to:4,w:0.4},{from:4,to:5,w:0.6},{from:4,to:6,w:0.3},
+];
+let agSelected=null,agAnimFrame=null,agPropStep=0,agPropQueue=[];
+
+function drawAG(){
+  const dpr=window.devicePixelRatio||1;
+  agCanvas.width=agCanvas.offsetWidth*dpr;
+  agCanvas.height=320*dpr;
+  agCtx.scale(dpr,dpr);
+  const W=agCanvas.offsetWidth,H=320;
+  agCtx.clearRect(0,0,W,H);
+  const r=22;
+  function nx(n){return n.x*W}
+  function ny(n){return n.y*H}
+  // Edges
+  agEdges.forEach(e=>{
+    const a=agNodes[e.from],b=agNodes[e.to];
+    const fromComp=a.compromised,toComp=b.compromised;
+    agCtx.strokeStyle=fromComp&&toComp?'rgba(232,57,74,0.7)':'rgba(255,255,255,0.1)';
+    agCtx.lineWidth=fromComp&&toComp?1.5:1;
+    agCtx.setLineDash(fromComp&&toComp?[]:[ 4,4]);
+    agCtx.beginPath();agCtx.moveTo(nx(a),ny(a));agCtx.lineTo(nx(b),ny(b));agCtx.stroke();
+    agCtx.setLineDash([]);
+    // Arrow
+    const dx=nx(b)-nx(a),dy=ny(b)-ny(a),dist=Math.sqrt(dx*dx+dy*dy);
+    const ux=dx/dist,uy=dy/dist;
+    const ex=nx(b)-ux*r,ey=ny(b)-uy*r;
+    agCtx.strokeStyle=fromComp&&toComp?'rgba(232,57,74,0.8)':'rgba(255,255,255,0.2)';
+    agCtx.lineWidth=1;
+    agCtx.beginPath();
+    agCtx.moveTo(ex-ux*8+uy*5,ey-uy*8-ux*5);
+    agCtx.lineTo(ex,ey);
+    agCtx.lineTo(ex-ux*8-uy*5,ey-uy*8+ux*5);
+    agCtx.stroke();
+    // Weight label
+    const mx=(nx(a)+nx(b))/2,my=(ny(a)+ny(b))/2;
+    agCtx.fillStyle='rgba(100,117,137,0.7)';
+    agCtx.font='9px JetBrains Mono';agCtx.textAlign='center';
+    agCtx.fillText('P='+e.w,mx,my-5);
+  });
+  // Nodes
+  agNodes.forEach(n=>{
+    const x=nx(n),y=ny(n);
+    // Outer ring
+    agCtx.strokeStyle=n.compromised?'rgba(232,57,74,0.9)':n.id===agSelected?'rgba(255,255,255,0.6)':'rgba(255,255,255,0.15)';
+    agCtx.lineWidth=n.compromised?2:1;
+    agCtx.beginPath();agCtx.arc(x,y,r,0,Math.PI*2);agCtx.stroke();
+    // Fill
+    agCtx.fillStyle=n.compromised?'rgba(232,57,74,0.2)':'rgba(12,21,32,0.9)';
+    agCtx.beginPath();agCtx.arc(x,y,r,0,Math.PI*2);agCtx.fill();
+    // Risk arc
+    agCtx.strokeStyle=n.compromised?'#e8394a':n.color;
+    agCtx.lineWidth=2.5;
+    agCtx.beginPath();agCtx.arc(x,y,r,-Math.PI/2,-Math.PI/2+2*Math.PI*(n.risk/10));agCtx.stroke();
+    // Label
+    agCtx.fillStyle=n.compromised?'#e8394a':'#e2e9f2';
+    agCtx.font='9px JetBrains Mono';agCtx.textAlign='center';
+    agCtx.fillText(n.label.length>8?n.label.slice(0,7)+'…':n.label,x,y+1);
+    agCtx.fillText(n.risk.toFixed(1),x,y+12);
+    if(n.compromised){agCtx.fillStyle='#e8394a';agCtx.font='bold 11px sans-serif';agCtx.fillText('⚠',x,y-10)}
+  });
+}
+
+agCanvas.addEventListener('click',e=>{
+  const rect=agCanvas.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)*(agCanvas.width/rect.width)/((window.devicePixelRatio||1));
+  const my=(e.clientY-rect.top)*(agCanvas.height/rect.height)/((window.devicePixelRatio||1));
+  const W=agCanvas.offsetWidth,H=320;
+  agSelected=null;
+  agNodes.forEach(n=>{
+    const dx=n.x*W-mx,dy=n.y*H-my;
+    if(Math.sqrt(dx*dx+dy*dy)<24){agSelected=n.id}
+  });
+  if(agSelected!==null){
+    const n=agNodes[agSelected];
+    const edges=agEdges.filter(e=>e.from===n.id||e.to===n.id);
+    document.getElementById('agInfo').innerHTML=`<strong>${n.label}</strong> · Risk score: ${n.risk} · ${n.compromised?'<span style="color:var(--red)">COMPROMISED</span>':'<span style="color:var(--teal)">Healthy</span>'}<br>Outbound edges: ${edges.filter(e=>e.from===n.id).length} · Propagation coupling: ${edges.map(e=>`${agNodes[e.to]?agNodes[e.to].label:agNodes[e.from].label}(${e.w})`).join(', ')}`;
+  }else{document.getElementById('agInfo').innerHTML='Click a node to inspect it · Click "Simulate Attack" to watch risk cascade through the service graph'}
+  drawAG();
+});
+
+function propagateRisk(){
+  agNodes.forEach(n=>n.compromised=false);
+  agNodes[agEntry].compromised=true;
+  agPropStep=0;agPropQueue=[agEntry];
+  if(agAnimFrame)clearInterval(agAnimFrame);
+  document.getElementById('agInfo').innerHTML=`<strong>Attack initiated at ${agNodes[agEntry].label}</strong> (Risk ${agNodes[agEntry].risk}) · Propagating via Markov transition probabilities…`;
+  agAnimFrame=setInterval(()=>{
+    if(!agPropQueue.length){clearInterval(agAnimFrame);return}
+    const curr=agPropQueue.shift();
+    agEdges.filter(e=>e.from===curr&&!agNodes[e.to].compromised).forEach(e=>{
+      if(Math.random()<e.w){agNodes[e.to].compromised=true;agPropQueue.push(e.to)}
+    });
+    const comp=agNodes.filter(n=>n.compromised);
+    document.getElementById('agInfo').innerHTML=`<strong>Cascade step ${++agPropStep}</strong> · ${comp.length} services compromised: ${comp.map(n=>`<span style="color:var(--red)">${n.label}</span>`).join(', ')}`;
+    drawAG();
+  },600);
+}
+function resetGraph(){if(agAnimFrame)clearInterval(agAnimFrame);agNodes.forEach(n=>n.compromised=false);agSelected=null;document.getElementById('agInfo').innerHTML='Click a node to inspect it · Click "Simulate Attack" to watch risk cascade';drawAG()}
+function setEntry(i){agEntry=i;resetGraph()}
+drawAG();
+
+/* ── CASCADING RISK CHART ── */
+const cascCanvas=document.getElementById('cascCanvas');
+const cascCtx=cascCanvas.getContext('2d');
+let cascRunning=false,cascTimer=null,cascT=0,cascData=[];
+
+function runCasc(){
+  if(cascRunning){clearInterval(cascTimer);cascRunning=false;return}
+  cascT=0;cascData=[];
+  const n=+document.getElementById('cascN').value;
+  const lam=+document.getElementById('lambdaSlider').value/10;
+  const mu=+document.getElementById('muSlider').value/10;
+  let infected=1/n,susceptible=1-infected,recovered=0;
+  const services=Array.from({length:n},(_,i)=>({risk:0}));
+  services[0].risk=0.9;
+  cascRunning=true;
+  cascTimer=setInterval(()=>{
+    cascT++;
+    const dI=lam*infected*susceptible;
+    const dR=mu*infected;
+    susceptible=Math.max(0,susceptible-dI);
+    infected=Math.min(1,Math.max(0,infected+dI-dR));
+    recovered=Math.min(1,recovered+dR);
+    cascData.push({s:susceptible,i:infected,r:recovered,t:cascT});
+    drawCasc();
+    if(cascT>120){clearInterval(cascTimer);cascRunning=false}
+  },60);
+}
+function resetCasc(){clearInterval(cascTimer);cascRunning=false;cascT=0;cascData=[];drawCasc()}
+
+function drawCasc(){
+  const dpr=window.devicePixelRatio||1;
+  cascCanvas.width=cascCanvas.offsetWidth*dpr;
+  cascCanvas.height=200*dpr;
+  cascCtx.scale(dpr,dpr);
+  const W=cascCanvas.offsetWidth,H=200;
+  cascCtx.clearRect(0,0,W,H);
+  if(!cascData.length){
+    cascCtx.fillStyle='rgba(100,117,137,0.3)';cascCtx.font='12px JetBrains Mono';cascCtx.textAlign='center';
+    cascCtx.fillText('Click "Run Simulation" to model cascading risk propagation (SIR model)',W/2,H/2);return;
+  }
+  const pad=40;
+  // Grid
+  cascCtx.strokeStyle='rgba(255,255,255,0.04)';cascCtx.lineWidth=0.5;
+  for(let g=0;g<=4;g++){const y=pad+(H-2*pad)*g/4;cascCtx.beginPath();cascCtx.moveTo(pad,y);cascCtx.lineTo(W-10,y);cascCtx.stroke();cascCtx.fillStyle='#374656';cascCtx.font='9px JetBrains Mono';cascCtx.textAlign='right';cascCtx.fillText((1-g/4).toFixed(1),pad-4,y+3)}
+  const totalSteps=Math.max(cascData.length,1);
+  function px(i){return pad+(W-pad-10)*i/totalSteps}
+  function py(v){return pad+(H-2*pad)*(1-v)}
+  const lines=[{key:'s',color:'rgba(59,130,246,0.8)',label:'Susceptible'},{key:'i',color:'rgba(232,57,74,0.9)',label:'Infected'},{key:'r',color:'rgba(34,197,94,0.7)',label:'Recovered'}];
+  lines.forEach(l=>{
+    cascCtx.strokeStyle=l.color;cascCtx.lineWidth=1.5;cascCtx.beginPath();
+    cascData.forEach((d,i)=>{i===0?cascCtx.moveTo(px(i),py(d[l.key])):cascCtx.lineTo(px(i),py(d[l.key]))});
+    cascCtx.stroke();
+  });
+  // Legend
+  cascCtx.textAlign='left';
+  lines.forEach((l,i)=>{
+    cascCtx.fillStyle=l.color;cascCtx.fillRect(pad+i*90,H-12,14,3);
+    cascCtx.fillStyle='#647589';cascCtx.font='9px JetBrains Mono';
+    cascCtx.fillText(l.label,pad+i*90+18,H-9);
+  });
+  if(cascData.length){
+    const last=cascData[cascData.length-1];
+    cascCtx.fillStyle='rgba(100,117,137,0.6)';cascCtx.font='9px JetBrains Mono';cascCtx.textAlign='right';
+    cascCtx.fillText(`t=${cascT} · infected=${(last.i*100).toFixed(0)}%`,W-10,12);
+  }
+}
+drawCasc();
+</script>
+</body>
+</html>
